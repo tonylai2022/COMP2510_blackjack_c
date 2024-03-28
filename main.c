@@ -16,10 +16,25 @@ int drawCard(int *deck, int *cardIndex);
 void printCard(int card);
 int getCardValue(int card, int *score);
 void playBlackjack();
+void placeBet();
 
 int main() {
     playBlackjack();
     return 0;
+}
+
+double placeBet() {
+    double playerMoney = 100.00;
+    double bet = -1.00;
+    do{
+        printf("How much would you like to bet on this hand ?: ");
+        scanf("%lf", &bet);
+        if (bet > 0 && bet < playerMoney) {
+            return bet;
+        } else {
+            printf("Invalid bet. You can bet between $0.01 and $%.2f.\n", playerMoney);
+        }
+    } while (bet < 0 || bet > playerMoney)
 }
 
 void shuffleDeck(int *deck) {
