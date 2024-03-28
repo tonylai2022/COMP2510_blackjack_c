@@ -42,7 +42,6 @@ int main() {
     return 0;
 }
 
-
 void shuffleDeck(int *deck) {
     for (int i = 0; i < DECK_SIZE; i++) {
         int j = rand() % DECK_SIZE;
@@ -184,6 +183,6 @@ double playBlackjack(double playerMoney) {
         return playerMoney;
     } else {
         printf("Dealer wins with %d against your %d.\n", dealerScore, playerScore);
-        return playerMoney - bet;
+        return playerMoney;
     }
 }
