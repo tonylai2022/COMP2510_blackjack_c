@@ -24,17 +24,21 @@ int main() {
 }
 
 double placeBet() {
-    double playerMoney = 100.00;
+    double playerMoney = 100.00; // Temporary value, need player money to import
     double bet = -1.00;
-    do{
-        printf("How much would you like to bet on this hand ?: ");
+    while (bet <= 0 || bet > playerMoney) { // Continue loop until a valid bet is made
+        printf("How much would you like to bet on this hand?: ");
         scanf("%lf", &bet);
-        if (bet > 0 && bet < playerMoney) {
-            return bet;
-        } else {
-            printf("Invalid bet. You can bet between $0.01 and $%.2f.\n", playerMoney);
+
+        if (bet <= 0) {
+            printf("The bet must be greater than $0.00.\n");
+        } else if (bet > playerMoney) {
+            printf("You cannot bet more than you have. You have $%.2f.\n", playerMoney);
         }
-    } while (bet < 0 || bet > playerMoney)
+        // No need for an else - if the bet is valid, the loop will exit naturally
+    }
+
+    return bet; // Only return when a valid bet has been made
 }
 
 void shuffleDeck(int *deck) {
