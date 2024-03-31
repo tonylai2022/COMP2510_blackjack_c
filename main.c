@@ -131,34 +131,66 @@ double playBlackjack(double playerMoney) {
     printCard(playerCard2);
     printf("\n");
 
+
+    // Double option
+    char doubleChoice;
+    int doubled = 0; // Flag to indicate if player has doubled
+    if (playerScore != BLACKJACK) { // Only offer double option if player doesn't have blackjack
+        printf("Would you like to double your bet? (y/n): ");
+        scanf(" %c", &doubleChoice);
+        // Clear the input buffer
+        while (getchar() != '\n');
+
+        if (doubleChoice == 'y') {
+            if (playerMoney < bet) {
+                printf("You don't have enough money to double your bet.\n");
+            } else {
+                playerMoney -= bet; // Deduct the additional bet from player's money
+                bet *= 2; // Double the bet
+                int card = drawCard(deck, &cardIndex);
+                playerScore += getCardValue(card, &playerScore);
+                printf("You drew: ");
+                printCard(card);
+                printf("\n");
+                if (playerScore > BLACKJACK) {
+                    printf("Bust! Your score is %d. You lose.\n", playerScore);
+                    return playerMoney;
+                }
+                doubled = 1; // Set flag to true
+            }
+        }
+    }
+
     // Player's turn
     char choice;
-    do {
-        printf("Your score: %d\n", playerScore);
+    if (!doubled) {
         do {
-            printf("Hit (h) or Stand (s)? ");
-            scanf(" %c", &choice);
-            // Clear the input buffer
-            while (getchar() != '\n');
+            printf("Your score: %d\n", playerScore);
+            do {
+                printf("Hit (h) or Stand (s)? ");
+                scanf(" %c", &choice);
+                // Clear the input buffer
+                while (getchar() != '\n');
 
-            if (choice != 'h' && choice != 's') {
-                printf("Invalid input. Please enter 'h' to hit or 's' to stand.\n");
+                if (choice != 'h' && choice != 's') {
+                    printf("Invalid input. Please enter 'h' to hit or 's' to stand.\n");
+                }
+            } while (choice != 'h' && choice != 's');
+
+            if (choice == 'h') {
+                int card = drawCard(deck, &cardIndex);
+                playerScore += getCardValue(card, &playerScore);
+                printf("You drew: ");
+                printCard(card);
+                printf("\n");
             }
-        } while (choice != 'h' && choice != 's');
 
-        if (choice == 'h') {
-            int card = drawCard(deck, &cardIndex);
-            playerScore += getCardValue(card, &playerScore);
-            printf("You drew: ");
-            printCard(card);
-            printf("\n");
-        }
-
-        if (playerScore > BLACKJACK) {
-            printf("Bust! Your score is %d. You lose.\n", playerScore);
-            return playerMoney;
-        }
-    } while (choice == 'h');
+            if (playerScore > BLACKJACK) {
+                printf("Bust! Your score is %d. You lose.\n", playerScore);
+                return playerMoney;
+            }
+        } while (choice == 'h');
+    }
 
     // Dealer's turn
     printf("Dealer's score: %d\n", dealerScore);
