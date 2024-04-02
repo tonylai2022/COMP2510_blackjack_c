@@ -131,65 +131,115 @@ double playBlackjack(double playerMoney) {
     printCard(playerCard2);
     printf("\n");
 
+    // Split logic
+    char split = 0;
+    if (playerCard1 == playerCard2 && playerMoney >= bet) {
+        char choice;
+        printf("Would you like to split? (y/N): ");
+        while ((choice = getchar()) != '\n');
+        split = choice == 'y';
+    }
 
-    // Double option
-    char doubleChoice;
-    int doubled = 0; // Flag to indicate if player has doubled
-    if (playerScore != BLACKJACK) { // Only offer double option if player doesn't have blackjack
-        printf("Would you like to double your bet? (y/n): ");
-        scanf(" %c", &doubleChoice);
-        // Clear the input buffer
-        while (getchar() != '\n');
+    int hands[] = {-1, -1}, bets[] = {bet, bet};
+    hands[0] = playerScore;
+    if (split) {
+        hands[0] = playerCard1;
+        hands[1] = playerCard2;
+        int hand1Card = drawCard(deck, &cardIndex);
+        hands[0] += getCardValue(hand1Card, hands);
+        int hand2Card = drawCard(deck, &cardIndex);
+        hands[1] += getCardValue(hand2Card, hands + 1);
+        printf("You were dealt a ");
+        printCard(hand1Card);
+        printf("to your first hand, and a ");
+        printCard(hand2Card);
+        printf("to your second hand.\n");
+        playerMoney -= bet;
+    }
+    // TODO: Simplify loop - Jaiden
+    for (int i = 0; i <= split; ++i) {
+        if (split) {
+            printf("Hand %d\n", i);
+        }
+        playerScore = hands[i];
+        bet = bets[i];
+        // Double option
+        char doubleChoice;
+        int doubled = 0; // Flag to indicate if player has doubled
+        if (playerScore != BLACKJACK) { // Only offer double option if player doesn't have blackjack
+            printf("Would you like to double your bet? (y/n): ");
+            scanf(" %c", &doubleChoice);
+            // Clear the input buffer
+            while (getchar() != '\n');
 
-        if (doubleChoice == 'y') {
-            if (playerMoney < bet) {
-                printf("You don't have enough money to double your bet.\n");
-            } else {
-                playerMoney -= bet; // Deduct the additional bet from player's money
-                bet *= 2; // Double the bet
-                int card = drawCard(deck, &cardIndex);
-                playerScore += getCardValue(card, &playerScore);
-                printf("You drew: ");
-                printCard(card);
-                printf("\n");
+            if (doubleChoice == 'y') {
+                if (playerMoney < bet) {
+                    printf("You don't have enough money to double your bet.\n");
+                } else {
+                    playerMoney -= bet; // Deduct the additional bet from player's money
+                    bet *= 2; // Double the bet
+                    int card = drawCard(deck, &cardIndex);
+                    playerScore += getCardValue(card, &playerScore);
+                    printf("You drew: ");
+                    printCard(card);
+                    printf("\n");
+                    if (playerScore > BLACKJACK) {
+                        printf("Bust! Your score is %d. You lose.\n", playerScore);
+                        hands[i] = -1;
+                        continue;
+                    }
+                    doubled = 1; // Set flag to true
+                }
+            }
+        }
+
+        bets[i] = bet;
+
+        // Player's turn
+        char choice;
+        if (!doubled) {
+            do {
+                printf("Your score: %d\n", playerScore);
+                do {
+                    printf("Hit (h) or Stand (s)? ");
+                    scanf(" %c", &choice);
+                    // Clear the input buffer
+                    while (getchar() != '\n');
+
+                    if (choice != 'h' && choice != 's') {
+                        printf("Invalid input. Please enter 'h' to hit or 's' to stand.\n");
+                    }
+                } while (choice != 'h' && choice != 's');
+
+                if (choice == 'h') {
+                    int card = drawCard(deck, &cardIndex);
+                    playerScore += getCardValue(card, &playerScore);
+                    printf("You drew: ");
+                    printCard(card);
+                    printf("\n");
+                }
+
                 if (playerScore > BLACKJACK) {
                     printf("Bust! Your score is %d. You lose.\n", playerScore);
-                    return playerMoney;
+                    hands[i] = -1;
+                    choice = '\0';
                 }
-                doubled = 1; // Set flag to true
-            }
+            } while (choice == 'h');
+        }
+        if (hands[i] != -1) {
+            hands[i] = playerScore;
         }
     }
 
-    // Player's turn
-    char choice;
-    if (!doubled) {
-        do {
-            printf("Your score: %d\n", playerScore);
-            do {
-                printf("Hit (h) or Stand (s)? ");
-                scanf(" %c", &choice);
-                // Clear the input buffer
-                while (getchar() != '\n');
+    char canWin = 0;
+    for (int i = 0; i <= split && canWin == 0; ++i) {
+        if (hands[i] != -1) {
+            canWin++;
+        }
+    }
 
-                if (choice != 'h' && choice != 's') {
-                    printf("Invalid input. Please enter 'h' to hit or 's' to stand.\n");
-                }
-            } while (choice != 'h' && choice != 's');
-
-            if (choice == 'h') {
-                int card = drawCard(deck, &cardIndex);
-                playerScore += getCardValue(card, &playerScore);
-                printf("You drew: ");
-                printCard(card);
-                printf("\n");
-            }
-
-            if (playerScore > BLACKJACK) {
-                printf("Bust! Your score is %d. You lose.\n", playerScore);
-                return playerMoney;
-            }
-        } while (choice == 'h');
+    if (!canWin) {
+        return playerMoney;
     }
 
     // Dealer's turn
@@ -203,18 +253,24 @@ double playBlackjack(double playerMoney) {
     }
     printf("Dealer's final score: %d\n", dealerScore);
 
-    // Determine winner
-    if (dealerScore > BLACKJACK) {
-        printf("Dealer busts. You win!\n");
-        return playerMoney + bet * 2;
-    } else if (playerScore > dealerScore) {
-        printf("You win with %d against the dealer's %d!\n", playerScore, dealerScore);
-        return playerMoney + bet * 2;
-    } else if (playerScore == dealerScore) {
-        printf("It's a tie! Dealer wins ties, so you lose.\n");
-        return playerMoney;
-    } else {
-        printf("Dealer wins with %d against your %d.\n", dealerScore, playerScore);
-        return playerMoney;
+    for (int i = 0; i <= split; ++i) {
+        playerScore = hands[i];
+        bet = bets[i];
+        if (playerScore == -1) {
+            continue;
+        }
+        // Determine winner
+        if (dealerScore > BLACKJACK) {
+            printf("Dealer busts. You win!\n");
+            playerMoney += bet * 2;
+        } else if (playerScore > dealerScore) {
+            printf("You win with %d against the dealer's %d!\n", playerScore, dealerScore);
+            playerMoney += bet * 2;
+        } else if (playerScore == dealerScore) {
+            printf("It's a tie! Dealer wins ties, so you lose.\n");
+        } else {
+            printf("Dealer wins with %d against your %d.\n", dealerScore, playerScore);
+        }
     }
+    return playerMoney;
 }
