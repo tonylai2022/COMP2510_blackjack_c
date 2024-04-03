@@ -131,6 +131,19 @@ double playBlackjack(double playerMoney) {
     printCard(playerCard2);
     printf("\n");
 
+    // Insurance option if dealer draws an ace.
+    if (dealerCard1 == 1) {
+        printf("Dealer's card is an Ace. Would you like the insurance option? (y/n): \n");
+        char choice;
+        scanf(" %c", &choice);
+        if (choice == 'y' || choice == 'Y') {
+            // Place insurance bet
+            double insuranceBet = bet / 2.0;
+            printf("Insurance bet placed: $%.2f\n", insuranceBet);
+            insuranceBetExists = 1;
+        }
+    }
+
     // Split logic
     char split = 0;
     if (playerCard1 == playerCard2 && playerMoney >= bet) {
@@ -252,6 +265,16 @@ double playBlackjack(double playerMoney) {
         printf("\n");
     }
     printf("Dealer's final score: %d\n", dealerScore);
+
+    // Determine insurance bet result.
+    if (insuranceBetExists) {
+        if (dealerScore == BLACKJACK && dealerCard1 == 1) {
+            printf("Dealer has blackjack. Insurance bet wins! Your losses have been covered.\n");
+            playerMoney += bet;
+        } else {
+            printf("Dealer does not have blackjack. Insurance bet loses.\n");
+        }
+    }
 
     for (int i = 0; i <= split; ++i) {
         playerScore = hands[i];
