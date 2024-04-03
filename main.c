@@ -22,6 +22,8 @@ int main() {
     double playerMoney = 100.00; // Initialize player's money
     srand(time(NULL));
 
+    int insuranceBetExists = 0;
+
     char playAgain = 'y';
     do {
         if (playerMoney <= 0) {
