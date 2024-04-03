@@ -212,11 +212,14 @@ double playBlackjack(double playerMoney) {
 
         bets[i] = bet;
 
-        // Player's turn
+// Player's turn
         char choice;
         if (!doubled) {
             do {
                 printf("Your score: %d\n", playerScore);
+                if (playerScore == BLACKJACK) {
+                    break; // Exit the loop if player has blackjack
+                }
                 do {
                     printf("Hit (h) or Stand (s)? ");
                     scanf(" %c", &choice);
@@ -246,6 +249,7 @@ double playBlackjack(double playerMoney) {
         if (hands[i] != -1) {
             hands[i] = playerScore;
         }
+
     }
 
     char canWin = insuranceBetExists; // If there's insurance, wait to see the dealer's hand
