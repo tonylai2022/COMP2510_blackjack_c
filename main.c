@@ -22,8 +22,6 @@ int main() {
     double playerMoney = 100.00; // Initialize player's money
     srand(time(NULL));
 
-    int insuranceBetExists = 0;
-
     char playAgain = 'y';
     do {
         if (playerMoney <= 0) {
@@ -115,6 +113,8 @@ double playBlackjack(double playerMoney) {
     double bet = placeBet(&playerMoney); // Place the bet
 
     int playerScore = 0, dealerScore = 0;
+
+    int insuranceBetExists = 0;
 
     // Initial deal
     int playerCard1 = drawCard(deck, &cardIndex);
