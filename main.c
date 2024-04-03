@@ -151,7 +151,8 @@ double playBlackjack(double playerMoney) {
     if (playerCard1 == playerCard2 && playerMoney >= bet) {
         char choice;
         printf("Would you like to split? (y/N): ");
-        while ((choice = getchar()) != '\n');
+        scanf(" %c", &choice);
+        while (getchar() != '\n');
         split = choice == 'y';
     }
 
@@ -174,7 +175,8 @@ double playBlackjack(double playerMoney) {
     // TODO: Simplify loop - Jaiden
     for (int i = 0; i <= split; ++i) {
         if (split) {
-            printf("Hand %d\n", i);
+            printf("Hand %d\n", i + 1);
+            printf("Your score: %d\n", hands[i]);
         }
         playerScore = hands[i];
         bet = bets[i];
@@ -246,7 +248,7 @@ double playBlackjack(double playerMoney) {
         }
     }
 
-    char canWin = 0;
+    char canWin = insuranceBetExists; // If there's insurance, wait to see the dealer's hand
     for (int i = 0; i <= split && canWin == 0; ++i) {
         if (hands[i] != -1) {
             canWin++;
@@ -281,6 +283,9 @@ double playBlackjack(double playerMoney) {
     for (int i = 0; i <= split; ++i) {
         playerScore = hands[i];
         bet = bets[i];
+        if (split && playerScore != -1) {
+            printf("Hand %d\n", i + 1);
+        }
         if (playerScore == -1) {
             continue;
         }
