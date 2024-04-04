@@ -354,15 +354,23 @@ double playBlackjack(double playerMoney) {
         if (playerScore == -1) {
             continue;
         }
-        // Determine winner
-        if (dealerScore > BLACKJACK) {
+// Determine winner
+        if (playerScore == BLACKJACK && cardIndex == 4 && !split) { // Check if player has blackjack without splitting or doubling
+            printf("Blackjack! You win 1.5 times your bet!\n");
+            playerMoney += bet * 2.5; // Blackjack win (1.5 times the bet plus the original bet)
+        } else if (dealerScore > BLACKJACK) {
             printf("Dealer busts. You win!\n");
-            playerMoney += bet * 2;
+            playerMoney += bet * 2; // Regular win
         } else if (playerScore > dealerScore) {
             printf("You win with %d against the dealer's %d!\n", playerScore, dealerScore);
-            playerMoney += bet * 2;
+            playerMoney += bet * 2; // Regular win
         } else if (playerScore == dealerScore) {
-            printf("It's a tie! Dealer wins ties, so you lose.\n");
+            if (playerScore == BLACKJACK) {
+                printf("Both have blackjack. It's a tie!\n");
+                playerMoney += bet; // Return the bet in case of a tie with blackjack
+            } else {
+                printf("It's a tie! Dealer wins ties, so you lose.\n");
+            }
         } else {
             printf("Dealer wins with %d against your %d.\n", dealerScore, playerScore);
         }
