@@ -16,6 +16,8 @@ int drawCard(int *deck, int *cardIndex);
 void printCard(int card);
 int getCardValue(int card, int *score);
 double placeBet(double *playerMoney);
+double placeSideBet(double *playerMoney);
+int checkStraight(int, int, int); // Checks for three card straight for side bet
 double playBlackjack(double playerMoney);
 
 int main() {
@@ -103,6 +105,47 @@ double placeBet(double *playerMoney) {
     return bet;
 }
 
+double placeSideBet(double *playerMoney) {
+    printf("Would you like to place a side bet? (y/n): ");
+    char choice;
+    scanf(" %c", &choice);
+    while (getchar() != '\n'); // Clear the input buffer.
+
+    if (choice == 'y' || choice == 'Y') {
+        double sideBet = 0.0;
+        do {
+            printf("How much would you like to bet? (Maximum bet $5.00, you have $%.2f): ", *playerMoney);
+            scanf("%lf", &sideBet);
+            // Clear the input buffer.
+            while (getchar() != '\n');
+
+            if (sideBet < 0 || sideBet > 5.0) {
+                printf("The bet must be between $0.00 and $5.00.\n");
+            } else if (sideBet > *playerMoney) {
+                printf("You cannot bet more than you have.\n");
+            }
+        } while (sideBet <= 0 || sideBet > 5.0 || sideBet > *playerMoney);
+
+        *playerMoney -= sideBet; // Deduct bet from player's money
+        return sideBet;
+    } else {
+        return 0.0;
+    }
+}
+
+
+int compare(const void *a, const void *b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int checkStraight(int card1, int card2, int dealerCard) {
+    int hand[3] = {card1, card2, dealerCard};
+    qsort(hand, 3, sizeof(int), compare);
+
+    // Check for straight
+    return (hand[0] + 1 == hand[1]) && (hand[1] + 1 == hand[2]);
+}
+
 double playBlackjack(double playerMoney) {
     int deck[DECK_SIZE];
     int cardIndex = 0;
@@ -111,6 +154,7 @@ double playBlackjack(double playerMoney) {
     shuffleDeck(deck);
 
     double bet = placeBet(&playerMoney); // Place the bet
+    double sideBet = placeSideBet(&playerMoney); // Optional side bet
 
     int playerScore = 0, dealerScore = 0;
 
@@ -131,6 +175,23 @@ double playBlackjack(double playerMoney) {
     printf("\nYour cards: ");
     printCard(playerCard1);
     printCard(playerCard2);
+    printf("\n");
+
+    if (sideBet > 0) { // Checks the side bet conditions if a side bet was placed
+        int total = playerCard1 + playerCard2 + dealerCard1;
+        // Adjust for Aces
+        if (playerCard1 == 1) playerCard1 = 11;
+        if (playerCard2 == 1) playerCard2 = 11;
+        if (dealerCard1 == 1) dealerCard1 = 11;
+
+        if (total == 21 || checkStraight(playerCard1, playerCard2, dealerCard1)) {
+            printf("Congratulations! Your side bet wins.\n");
+            // Assuming a payout of 5:1 for the side bet
+            playerMoney += sideBet * 6; // Original bet plus winnings
+        } else {
+            printf("Side bet lost.\n");
+        }
+    }
     printf("\n");
 
     // Insurance option if dealer draws an ace.
