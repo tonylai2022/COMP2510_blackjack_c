@@ -208,7 +208,7 @@ double playBlackjack(double playerMoney) {
     }
 
     // Split logic
-    char split = 0;
+    int split = 0;
     if (playerCard1 == playerCard2 && playerMoney >= bet) {
         char choice;
         printf("Would you like to split? (y/N): ");
@@ -217,7 +217,8 @@ double playBlackjack(double playerMoney) {
         split = choice == 'y';
     }
 
-    int hands[] = {-1, -1}, bets[] = {bet, bet};
+    int hands[] = {-1, -1};
+    double bets[] = {bet, bet};
     hands[0] = playerScore;
     if (split) {
         hands[0] = playerCard1;
@@ -313,7 +314,7 @@ double playBlackjack(double playerMoney) {
 
     }
 
-    char canWin = insuranceBetExists; // If there's insurance, wait to see the dealer's hand
+    int canWin = insuranceBetExists; // If there's insurance, wait to see the dealer's hand
     for (int i = 0; i <= split && canWin == 0; ++i) {
         if (hands[i] != -1) {
             canWin++;
