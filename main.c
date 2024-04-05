@@ -194,9 +194,9 @@ double playBlackjack(double playerMoney) {
     }
     printf("\n");
 
-    // Insurance option if dealer draws an ace.
+// Insurance option if dealer draws an ace.
     if (dealerCard1 == 1) {
-        printf("Dealer's card is an Ace. Would you like the insurance option? (y/n): \n");
+        printf("Dealer's card is an Ace. Would you like the insurance option? (y/n): ");
         char choice;
         scanf(" %c", &choice);
         if (choice == 'y' || choice == 'Y') {
@@ -204,8 +204,10 @@ double playBlackjack(double playerMoney) {
             double insuranceBet = bet / 2.0;
             printf("Insurance bet placed: $%.2f\n", insuranceBet);
             insuranceBetExists = 1;
+            playerMoney -= insuranceBet; // Deduct the insurance bet from player's money
         }
     }
+
 
     // Split logic
     int split = 0;
