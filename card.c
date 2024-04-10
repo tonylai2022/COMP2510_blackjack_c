@@ -31,6 +31,21 @@ int checkStraight(int card1, int card2, int dealerCard) {
     int hand[3] = {card1, card2, dealerCard};
     qsort(hand, 3, sizeof(int), compare);
 
-    // Check for straight
-    return (hand[0] + 1 == hand[1]) && (hand[1] + 1 == hand[2]);
+    // Check for regular straight
+    if ((hand[0] + 1 == hand[1]) && (hand[1] + 1 == hand[2])) {
+        return 1;
+    }
+
+    // Special case for Ace (1), 2, 3 straight
+    if (hand[0] == 1 && hand[1] == 2 && hand[2] == 3) {
+        return 1;
+    }
+
+    // Special case for Queen (12), King (13), Ace (1) straight
+    if (hand[0] == 1 && hand[1] == 12 && hand[2] == 13) {
+        return 1;
+    }
+
+    return 0;
 }
+
