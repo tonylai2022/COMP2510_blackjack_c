@@ -6,9 +6,9 @@ This is a simple command-line implementation of the popular card game Blackjack 
 
 ## Team Members - Students numbers:
 Tony Lai - A01279412
-Jasper
-Jaiden Duncan
-Effrum
+Jasper Wang - A01362031
+Jaiden Duncan - A01376315
+Ephraim Hsu - A01366848
 Peter Senyk - A01376857
 
 ## Features
