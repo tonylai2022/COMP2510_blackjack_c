@@ -2,6 +2,89 @@
 
 #include "game.h"
 
+int getDemoValue(int forCard, int *cardIndex) {
+    // for forCard, 0 represents playerCard1, 1 represents dealerCard 1, 2 is playerCard2, and 3 is dealerCard2
+    if (DEMO != 0) {
+        // 0 is not demo
+        (*cardIndex)++;
+    }
+    switch (DEMO) {
+        case 1:
+            // tie
+            switch (forCard) {
+                case 0:
+                    return 10;
+                case 1:
+                    return 10;
+                case 2:
+                    return 7;
+                case 3:
+                    return 7;
+            }
+        case 2:
+            // user win
+            switch (forCard) {
+                case 0:
+                    return 1;
+                case 1:
+                    return 10;
+                case 2:
+                    return 10;
+                case 3:
+                    return 10;
+            }
+        case 3:
+            // user side bet
+            switch (forCard) {
+                case 0:
+                    return 7;
+                case 1:
+                    return 8;
+                case 2:
+                    return 9;
+                case 3:
+                    return 10;
+            }
+            case 4:
+                // Insurance loss
+                switch (forCard) {
+                    case 0:
+                        return 8;
+                    case 1:
+                        return 1;
+                    case 2:
+                        return 7;
+                    case 3:
+                        return 2;
+                }
+            case 5:
+                // Insurance win
+                switch (forCard) {
+                    case 0:
+                        return 8;
+                    case 1:
+                        return 1;
+                    case 2:
+                        return 7;
+                    case 3:
+                        return 10;
+                }
+            case 6:
+                // Double win
+                switch (forCard) {
+                    case 0:
+                        return 8;
+                    case 1:
+                        return 10;
+                    case 2:
+                        return 3;
+                    case 3:
+                        return 6;
+                }
+
+    }
+}
+
 double playBlackjack(double playerMoney) {
     int deck[DECK_SIZE];
     int cardIndex = 0;
@@ -17,13 +100,37 @@ double playBlackjack(double playerMoney) {
     int insuranceBetExists = 0;
 
     // Initial deal
-    int playerCard1 = drawCard(deck, &cardIndex);
+    int playerCard1;
+    if (DEMO == 0) {
+        playerCard1 = drawCard(deck, &cardIndex);
+    } else {
+        playerCard1 = getDemoValue(0, &cardIndex);
+    }
+//    int playerCard1 = drawCard(deck, &cardIndex);
     playerScore += getCardValue(playerCard1, &playerScore);
-    int dealerCard1 = drawCard(deck, &cardIndex);
+    int dealerCard1;
+    if (DEMO == 0) {
+        dealerCard1 = drawCard(deck, &cardIndex);
+    } else {
+        dealerCard1 = getDemoValue(1, &cardIndex);
+    }
+//    int dealerCard1 = drawCard(deck, &cardIndex);
     dealerScore += getCardValue(dealerCard1, &dealerScore);
-    int playerCard2 = drawCard(deck, &cardIndex);
+    int playerCard2;
+    if (DEMO == 0) {
+        playerCard2 = drawCard(deck, &cardIndex);
+    } else {
+        playerCard2 = getDemoValue(2, &cardIndex);
+    }
+//    int playerCard2 = drawCard(deck, &cardIndex);
     playerScore += getCardValue(playerCard2, &playerScore);
-    int dealerCard2 = drawCard(deck, &cardIndex);
+    int dealerCard2;
+    if (DEMO == 0) {
+        dealerCard2 = drawCard(deck, &cardIndex);
+    } else {
+        dealerCard2 = getDemoValue(3, &cardIndex);
+    }
+//    int dealerCard2 = drawCard(deck, &cardIndex);
     dealerScore += getCardValue(dealerCard2, &dealerScore);
 
     // blackjack (tie)
@@ -42,6 +149,16 @@ double playBlackjack(double playerMoney) {
 //    int dealerCard1 = 2;
 //    dealerScore += getCardValue(dealerCard1, &dealerScore);
 //    int playerCard2 = 10;
+//    playerScore += getCardValue(playerCard2, &playerScore);
+//    int dealerCard2 = 10;
+//    dealerScore += getCardValue(dealerCard2, &dealerScore);
+
+    // blackjack (user side bet)
+//    int playerCard1 = 7;
+//    playerScore += getCardValue(playerCard1, &playerScore);
+//    int dealerCard1 = 8;
+//    dealerScore += getCardValue(dealerCard1, &dealerScore);
+//    int playerCard2 = 9;
 //    playerScore += getCardValue(playerCard2, &playerScore);
 //    int dealerCard2 = 10;
 //    dealerScore += getCardValue(dealerCard2, &dealerScore);
