@@ -2,6 +2,7 @@
 #define BLACKJACK_DEMO_H
 
 #define DEMO 0
+// Normal: 0
 //Tie: 1
 //User Win: 2
 //User Side Bet: 3
