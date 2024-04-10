@@ -92,7 +92,8 @@ double playBlackjack(double playerMoney) {
         printf("to your second hand.\n");
         playerMoney -= bet;
     }
-    // TODO: Simplify loop - Jaiden
+
+
     for (int i = 0; i <= split; ++i) {
         if (split) {
             printf("Hand %d\n", i + 1);
