@@ -26,6 +26,26 @@ double playBlackjack(double playerMoney) {
     int dealerCard2 = drawCard(deck, &cardIndex);
     dealerScore += getCardValue(dealerCard2, &dealerScore);
 
+    // blackjack (tie)
+//    int playerCard1 = 1;
+//    playerScore += getCardValue(playerCard1, &playerScore);
+//    int dealerCard1 = 1;
+//    dealerScore += getCardValue(dealerCard1, &dealerScore);
+//    int playerCard2 = 10;
+//    playerScore += getCardValue(playerCard2, &playerScore);
+//    int dealerCard2 = 10;
+//    dealerScore += getCardValue(dealerCard2, &dealerScore);
+
+    // blackjack (user win)
+//    int playerCard1 = 1;
+//    playerScore += getCardValue(playerCard1, &playerScore);
+//    int dealerCard1 = 2;
+//    dealerScore += getCardValue(dealerCard1, &dealerScore);
+//    int playerCard2 = 10;
+//    playerScore += getCardValue(playerCard2, &playerScore);
+//    int dealerCard2 = 10;
+//    dealerScore += getCardValue(dealerCard2, &dealerScore);
+
     printf("Dealer's first card: ");
     printCard(dealerCard1);
     printf("\nYour cards: ");
