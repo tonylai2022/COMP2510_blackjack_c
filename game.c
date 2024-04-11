@@ -295,7 +295,18 @@ int playYouAreBroke() {
               NULL, SND_FILENAME | SND_ASYNC);
 
     // Wait for sound to finish (optional)
-    Sleep(3000);  // Sleep for 5 seconds
+    Sleep(2500);  // Sleep for 5 seconds
+
+    return 0;
+}
+
+int yourSoundFunction() {
+    // Open and play the WAV file
+    PlaySound(TEXT("Path to your MAV file location."),
+              NULL, SND_FILENAME | SND_ASYNC);
+
+    // Time to wait after sound function has been executed.
+    Sleep(3000);
 
     return 0;
 }
