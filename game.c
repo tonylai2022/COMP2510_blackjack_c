@@ -4,50 +4,6 @@
 
 #include "game.h"
 
-int playWinningSound() {
-    // Open and play the WAV file
-    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\krabs_money-1.wav"), NULL,
-              SND_FILENAME | SND_ASYNC);
-
-    // Wait for sound to finish (optional)
-    Sleep(0);  // Sleep for 5 seconds
-
-    return 0;
-}
-
-int playLosingSound() {
-    // Open and play the WAV file
-    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\sadtrombone.wav"),
-              NULL, SND_FILENAME | SND_ASYNC);
-
-    // Wait for sound to finish (optional)
-    Sleep(0);  // Sleep for 5 seconds
-
-    return 0;
-}
-
-int playInsuranceBetWins() {
-    // Open and play the WAV file
-    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\whoa-that-was-close-tommy-boy.wav"),
-              NULL, SND_FILENAME | SND_ASYNC);
-
-    // Wait for sound to finish (optional)
-    Sleep(0);  // Sleep for 5 seconds
-
-    return 0;
-}
-
-int playYouAreBroke() {
-    // Open and play the WAV file
-    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\youre-broke.wav"),
-              NULL, SND_FILENAME | SND_ASYNC);
-
-    // Wait for sound to finish (optional)
-    Sleep(3000);  // Sleep for 5 seconds
-
-    return 0;
-}
-
 int drawCardBasedOnDemo(int deck[], int *cardIndex, int demoValue) {
     return (DEMO == 0) ? drawCard(deck, cardIndex) : getDemoValue(demoValue, cardIndex);
 }
@@ -298,4 +254,48 @@ double playBlackjack(double playerMoney) {
         }
     }
     return playerMoney;
+}
+
+int playWinningSound() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\krabs_money-1.wav"), NULL,
+              SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(0);  // Sleep for 5 seconds
+
+    return 0;
+}
+
+int playLosingSound() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\sadtrombone.wav"),
+              NULL, SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(0);  // Sleep for 5 seconds
+
+    return 0;
+}
+
+int playInsuranceBetWins() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\whoa-that-was-close-tommy-boy.wav"),
+              NULL, SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(0);  // Sleep for 5 seconds
+
+    return 0;
+}
+
+int playYouAreBroke() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\youre-broke.wav"),
+              NULL, SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(3000);  // Sleep for 5 seconds
+
+    return 0;
 }
