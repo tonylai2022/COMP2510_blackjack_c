@@ -16,4 +16,10 @@
 // Main function to play a round of Blackjack.
 double playBlackjack(double playerMoney);
 
+//Sound functions that play losing, winning, and broke sounds.
+int playYouAreBroke();
+int playLosingSound();
+int playWinningSound();
+int playInsuranceBetWins();
+
 #endif

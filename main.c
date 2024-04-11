@@ -1,7 +1,7 @@
+#include "game.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "game.h"
 
 int main() {
     double playerMoney = 100.00; // Initialize player's money
@@ -10,6 +10,7 @@ int main() {
     char playAgain = 'y';
     do {
         if (playerMoney <= 0) {
+            playYouAreBroke();
             printf("You've run out of money. Game over.\n");
             break;
         }

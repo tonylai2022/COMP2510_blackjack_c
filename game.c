@@ -1,7 +1,52 @@
 #include <stdio.h>
+#include <windows.h>
+#include <mmsystem.h>
 
 #include "game.h"
 
+int playWinningSound() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\krabs_money-1.wav"), NULL,
+              SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(0);  // Sleep for 5 seconds
+
+    return 0;
+}
+
+int playLosingSound() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\sadtrombone.wav"),
+              NULL, SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(0);  // Sleep for 5 seconds
+
+    return 0;
+}
+
+int playInsuranceBetWins() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\whoa-that-was-close-tommy-boy.wav"),
+              NULL, SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(0);  // Sleep for 5 seconds
+
+    return 0;
+}
+
+int playYouAreBroke() {
+    // Open and play the WAV file
+    PlaySound(TEXT("C:\\Users\\ephra\\Downloads\\youre-broke.wav"),
+              NULL, SND_FILENAME | SND_ASYNC);
+
+    // Wait for sound to finish (optional)
+    Sleep(3000);  // Sleep for 5 seconds
+
+    return 0;
+}
 
 int drawCardBasedOnDemo(int deck[], int *cardIndex, int demoValue) {
     return (DEMO == 0) ? drawCard(deck, cardIndex) : getDemoValue(demoValue, cardIndex);
@@ -130,6 +175,7 @@ double playBlackjack(double playerMoney) {
                     printCard(card);
                     printf("\n");
                     if (playerScore > BLACKJACK) {
+                        playLosingSound();
                         printf("Bust! Your score is %d. You lose.\n", playerScore);
                         hands[i] = -1;
                         continue;
@@ -169,6 +215,7 @@ double playBlackjack(double playerMoney) {
                 }
 
                 if (playerScore > BLACKJACK) {
+                    playLosingSound();
                     printf("Bust! Your score is %d. You lose.\n", playerScore);
                     hands[i] = -1;
                     choice = '\0';
@@ -206,6 +253,7 @@ double playBlackjack(double playerMoney) {
     // Determine insurance bet result.
     if (insuranceBetExists) {
         if (dealerScore == BLACKJACK && dealerCard1 == 1) {
+            playInsuranceBetWins();
             printf("Dealer has blackjack. Insurance bet wins! Your losses have been covered.\n");
             playerMoney += bet;
         } else {
@@ -222,14 +270,18 @@ double playBlackjack(double playerMoney) {
         if (playerScore == -1) {
             continue;
         }
+
 // Determine winner
         if (playerScore == BLACKJACK && cardIndex == 4 && !split) { // Check if player has blackjack without splitting or doubling
+            playWinningSound();
             printf("Blackjack! You win 1.5 times your bet!\n");
             playerMoney += bet * 2.5; // Blackjack win (1.5 times the bet plus the original bet)
         } else if (dealerScore > BLACKJACK) {
+            playWinningSound();
             printf("Dealer busts. You win!\n");
             playerMoney += bet * 2; // Regular win
         } else if (playerScore > dealerScore) {
+            playWinningSound();
             printf("You win with %d against the dealer's %d!\n", playerScore, dealerScore);
             playerMoney += bet * 2; // Regular win
         } else if (playerScore == dealerScore) {
@@ -237,9 +289,11 @@ double playBlackjack(double playerMoney) {
                 printf("Both have blackjack. It's a tie!\n");
                 playerMoney += bet; // Return the bet in case of a tie with blackjack
             } else {
+                playLosingSound();
                 printf("It's a tie! Dealer wins ties, so you lose.\n");
             }
         } else {
+            playLosingSound();
             printf("Dealer wins with %d against your %d.\n", dealerScore, playerScore);
         }
     }
